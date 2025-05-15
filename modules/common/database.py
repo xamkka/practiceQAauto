@@ -56,3 +56,15 @@ class Database():
         self.cursor.execute(query)
         record = self.cursor.fetchall()
         return record
+    
+    def add_new_customer(self, customer_id, name, address, city, postalCode, country):
+        query = f"INSERT OR REPLACE INTO customers (id, name, address, city, postalCode, country) \
+            VALUES ({customer_id}, '{name}', '{address}', '{city}', '{postalCode}', '{country}')"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def get_user_name_by_id(self, customer_id):
+        query = f"SELECT name FROM customers WHERE id = {customer_id}"
+        self.cursor.execute(query)
+        record = self.cursor.fetchall()
+        return record

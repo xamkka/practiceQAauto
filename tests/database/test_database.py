@@ -68,3 +68,36 @@ def test_detailed_orders():
     assert orders[0][1] == 'Sergii'
     assert orders[0][2] == 'солодка вода'
     assert orders[0][3] == 'з цукром'
+
+
+@pytest.mark.database
+def test_update_product_qnt_to_zero():
+    db = Database()
+    db.update_product_qnt_by_id(1, 0)
+    water_qnt = db.select_product_qnt_by_id(1)
+
+    assert water_qnt[0][0] == 0
+
+@pytest.mark.database
+def test_update_nonexistent_product_qnt():
+    db = Database()
+    db.update_product_qnt_by_id(999, 65)
+    product_qnt = db.select_product_qnt_by_id(999)
+    # Check that product with id 999 doesn't exist
+    assert len(product_qnt) == 0
+
+@pytest.mark.database
+def test_add_new_customer():
+    db = Database()
+    db.add_new_customer(3, 'Tamila', 'Shevchenka35', 'Lviv', '79000', 'Ukraine')
+    customer = db.get_user_name_by_id(3)
+
+    assert customer[0][0] == 'Tamila'
+
+
+@pytest.mark.database
+def test_get_all_users_with_limit():
+    db = Database()
+    users = db.get_all_users(limit=2)
+
+    assert len(users) == 2
